@@ -8,7 +8,7 @@ router.post("/api/user/:userID", userController.editUser);
 router.delete("/api/user/:userID", userController.deleteUser);
 
 //auth
-router.get("/api/signin", userController.signIn);
+router.post("/api/signin", userController.signIn);
 router.post("/api/signout", userController.signOut);
 router.post("/api/signup", userController.signUp);
 // router.post("/logout", userController.postLogout);

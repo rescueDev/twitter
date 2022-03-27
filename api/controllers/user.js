@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const saltRounds = 12;
 
 exports.fetchUsers = async (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
@@ -28,21 +28,28 @@ exports.fetchUser = async (req, res, next) => {
 exports.signUp = async (req, res, next) => {
   //Set header JSON
   res.setHeader("Content-Type", "application/json");
-  res.json({ requestBody: req.body });
-  [];
-  const name = req.body.name;
-  const surname = req.body.surname;
-  const username = req.body.username;
-  const email = req.body.email;
-  const avatar = req.body.avatar;
-  const password = req.body.password;
-
-  //hash password before insert
-  const hashed_password = bcrypt.hashSync(password, saltRounds);
-
-  const user = { name, surname, username, email, avatar, hashed_password };
 
   try {
+    res.json({ requestBody: req.body });
+    const name = req.body.name;
+    const surname = req.body.surname;
+    const username = req.body.username;
+    const email = req.body.email;
+    const avatar = req.body.avatar;
+    const password = req.body.password;
+
+    //hash password before insert
+    const hashed_password = bcrypt.hashSync(password, 12);
+
+    const user = {
+      name: name,
+      surname: surname,
+      email: email,
+      username: username,
+      password: hashed_password,
+      avatar: avatar,
+    };
+    console.log(user);
     await User.create(user);
   } catch (error) {
     res.send(JSON.stringify({ error: error }));
@@ -92,5 +99,39 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 //auth
-exports.signIn = (req, res, next) => {};
+exports.signIn = async (req, res, next) => {
+  //Set header JSON
+  res.setHeader("Content-Type", "application/json");
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) {
+      return res.redirect("/login");
+    }
+
+    const doMatch = await bcrypt.compare(password, user.password);
+
+    //if passwords do match
+    if (doMatch) {
+      //create new session for this user
+      // req.session.isLoggedIn = true;
+      // req.session.user = user;
+      //save session
+      // return req.session.save((err) => {
+      //   console.log("errors post login?", err);
+      //   res.redirect("/");
+      // });
+      return res.redirect("/");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.signOut = (req, res, next) => {};
