@@ -1,0 +1,12 @@
+.register_wrapper{
+    text-align: center;
+    width: 300px;
+}
+.register_container{
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid #f0eded;
+    min-height: 300px;
+    width: 400px;
+    background-color: #fcfcfc;
+}

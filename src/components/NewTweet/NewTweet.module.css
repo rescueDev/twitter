@@ -1,0 +1,25 @@
+.newTweet{
+    width: 30%;
+    margin: 40px 0;
+}
+
+.textareaTweet{
+    /* border: none; */
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.btnTweet{
+    background: #fff;
+    color: #1c9bef;
+    border: none;
+    border-radius: 10px;
+}
+
+.options{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-height: 20px ;
+}
