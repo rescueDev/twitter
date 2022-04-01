@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const initialFormData = Object.freeze({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const [formData, updateFormData] = useState(initialFormData);
 
@@ -23,7 +25,18 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/api/signin", formData);
+      const response = await axios.post(
+        "http://localhost:3001/api/signin",
+        formData
+      );
+
+      console.log(response);
+
+      if (response.status == 200) {
+        navigate("/");
+      } else {
+        navigate("/login", { replace: true });
+      }
     } catch (error) {
       console.log(error);
     }
