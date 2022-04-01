@@ -112,25 +112,24 @@ exports.signIn = async (req, res, next) => {
       },
     });
     if (!user) {
-      return res.redirect("/login");
+      return res.status(400).send("Errore");
     }
 
     const doMatch = await bcrypt.compare(password, user.password);
 
     //if passwords do match
     if (doMatch) {
+      console.log("passwords do match !!");
       //create new session for this user
-      // req.session.isLoggedIn = true;
-      // req.session.user = user;
+      req.session.isLoggedIn = true;
+      req.session.user = user;
       //save session
-      // return req.session.save((err) => {
-      //   console.log("errors post login?", err);
-      //   res.redirect("/");
-      // });
-      return res.redirect("/");
+
+      return res.send(req.session);
     }
   } catch (error) {
     console.log(error);
+    return res.status(400).send(error);
   }
 };
 
