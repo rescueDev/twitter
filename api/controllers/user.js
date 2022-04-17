@@ -123,6 +123,12 @@ exports.signIn = async (req, res, next) => {
       //create new session for this user
       req.session.isLoggedIn = true;
       req.session.user = user;
+      req.session.user_id = user.id;
+
+      //save session
+      req.session.save((err) => {
+        console.log("errors post login?", err);
+      });
       //save session
 
       return res.send(req.session);

@@ -2,9 +2,14 @@ import React, { useState, useContext } from "react";
 import { MyTweetsContext } from "../../context/TweetContex";
 import styles from "./NewTweet.module.css";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function NewTweet() {
   const [tweetText, setTweetText] = useState("");
+
+  const [userCookie, setUserCoookie] = useState(
+    JSON.parse(Cookies.get("user"))
+  );
 
   const [myTweets, setMyTweets, fetchTweets] = useContext(MyTweetsContext);
 
@@ -20,9 +25,9 @@ export default function NewTweet() {
         comments: 0,
         retweets: 0,
         likes: 0,
-        user_id: 2,
+        user_id: userCookie.id,
       });
-
+      console.log(userCookie.id);
       fetchTweets();
     } catch (err) {
       console.log(err);

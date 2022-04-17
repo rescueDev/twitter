@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Login.module.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const initialFormData = Object.freeze({
@@ -32,10 +33,17 @@ export default function Login() {
 
       console.log(response);
 
+      //login ok
       if (response.status == 200) {
+        //save cookie from express=session
+        let expires = new Date();
+        expires.setTime(expires.getTime() + response.data.expires_in * 1000);
+
+        Cookies.set("user", response.data.user, expires);
         navigate("/");
       } else {
-        navigate("/login", { replace: true });
+        //redirect
+        navigate("/login");
       }
     } catch (error) {
       console.log(error);
